@@ -4,6 +4,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import TasksService from '../services/TasksService';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 class Task extends React.Component {
 
@@ -59,8 +61,18 @@ class Task extends React.Component {
             .catch(err => console.log(err));
     }
 
-    completeTask = () => {
-        console.log('complete');
+    toggleStatus = () => {
+        let completedTask = this.props.task;
+        completedTask.isCompleted = !completedTask.isCompleted;
+        
+        console.log(completedTask);
+
+        TasksService.editTask(completedTask)
+            .then(res => {
+                this.completeEdit();
+                this.props.handleEdit(res);
+            })
+            .catch(err => console.log(err));
     }
 
     handleChange = (event) => {
@@ -71,47 +83,54 @@ class Task extends React.Component {
         });
     }
 
+    renderStatusIcon = () => {
+        return this.props.task.isCompleted ? <CheckCircleOutlineIcon onClick={this.toggleStatus} /> : <RadioButtonUncheckedIcon onClick={this.toggleStatus} />
+    }
+
+    renderEditingTask = () => {
+        return (
+            <div className="task editing-task">
+                <div className="texts">
+                    <input
+                        className="title-field"
+                        type="text"
+                        name="editingTitle"
+                        value={this.state.editingTitle}
+                        onChange={this.handleChange} />
+                    <input
+                        className="description-field"
+                        type="text"
+                        name="editingDescription"
+                        value={this.state.editingDescription}
+                        onChange={this.handleChange} />
+                </div>
+                <div className="buttons">
+                    <div onClick={this.editTask}><DoneIcon /></div>
+                    <div onClick={this.cancelEdit}><CloseIcon /></div>
+                </div>
+            </div>
+        )
+    }
+
+    renderDefaultTask = () => {
+        return (
+            <div className={`task ${this.props.task.isCompleted ? "completed-task" : ""}`}>
+                { this.renderStatusIcon() }
+                <div className="texts" onClick={this.toggleStatus}>
+                    <span className="title">{this.props.task.title}</span>
+                    {this.props.task.description ? <span className="description">{this.props.task.description}</span> : ""}
+
+                </div>
+                <div className="buttons">
+                    {this.props.task.isCompleted ? "" : <div onClick={this.openEditor}><EditIcon /></div>}
+                    <div onClick={this.deleteTask}><DeleteIcon /></div>
+                </div>
+            </div>
+        )
+    }
+
     render() {
-        let task = this.props.task;
-
-        if (this.state.isEditing) {
-            return (
-                <div className="task editing-task">
-                    <div className="texts">
-                        <input
-                            className="title-field"
-                            type="text"
-                            name="editingTitle"
-                            value={this.state.editingTitle}
-                            onChange={this.handleChange} />
-                        <input
-                            className="description-field"
-                            type="text"
-                            name="editingDescription"
-                            value={this.state.editingDescription}
-                            onChange={this.handleChange} />
-                    </div>
-                    <div className="buttons">
-                        <div onClick={this.editTask}><DoneIcon /></div>
-                        <div onClick={this.cancelEdit}><CloseIcon /></div>
-                    </div>
-                </div>
-            )
-        } else {
-            return (
-                <div className="task">
-                    <div className="texts" onClick={this.completeTask}>
-                        <span className="title">{task.title}</span>
-                        {task.description ? <span className="description">{task.description}</span> : ""}
-
-                    </div>
-                    <div className="buttons">
-                        <div onClick={this.openEditor}><EditIcon /></div>
-                        <div onClick={this.deleteTask}><DeleteIcon /></div>
-                    </div>
-                </div>
-            )
-        }
+        return this.state.isEditing ? this.renderEditingTask() : this.renderDefaultTask();
     }
 }
 

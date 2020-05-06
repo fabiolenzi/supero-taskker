@@ -85,10 +85,16 @@ header {
     background: linear-gradient(to right, #64b3f4, #c2e59c);
   }
 
+  &.completed-task {
+    background-color: lightgray;
+    border-color: lightgray;
+  }
+
   .texts {
     display: flex;
     flex: 1;
     flex-direction: column;
+    margin-left: 10px;
     text-align: left;
     width: 100%;
   }
