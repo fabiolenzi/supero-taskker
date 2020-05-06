@@ -12,22 +12,34 @@ input {
   border-radius: 7px;
   padding: 4px;
   margin: 0 10px;
+
+  &.invalid-field {
+    border: solid 2px red;
+  }
 }
 
-.new-task-form {
+header {
+  align-items: center;
   background: #c2e59c;
   background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);
   background: linear-gradient(to right, #64b3f4, #c2e59c);
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.new-task-form {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 20px;
   padding: 10px 20px;
   width: 100%;
 
   .title {
     font-size: 20px;
+    margin-bottom: 10px;
   }
 
   .form {
@@ -88,9 +100,5 @@ input {
 
   .title {
     font-size: 2vw;
-  }
-
-  .editing-task {
-
   }
 }

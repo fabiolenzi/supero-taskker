@@ -6,7 +6,7 @@ class TaskList extends React.Component {
         return (
             <div className="list">
                 {this.props.tasks.map(task =>
-                    <Task key={task.id} task={task} />
+                    <Task key={task.id} task={task} {...this.props} />
                 )}
             </div>
         )

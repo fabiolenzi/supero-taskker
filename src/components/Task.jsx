@@ -2,6 +2,7 @@ import React from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from '@material-ui/icons/Close';
 import TasksService from '../services/TasksService';
 
 class Task extends React.Component {
@@ -11,22 +12,49 @@ class Task extends React.Component {
 
         this.state = {
             isEditing: false,
-            editingTitle: "",
-            editingDescription: ""
+            editingTitle: props.task.title,
+            editingDescription: props.task.description
         }
     }
 
-
-    handleEditClick = () => {
-        console.log(`edit id ${this.props.task.id}`)
+    openEditor = () => {
         this.setState({ isEditing: true })
     }
 
-    handleDelete = () => {
-        console.log(`delete id ${this.props.task.id}`);
+    cancelEdit = () => {
+        this.setState({
+            isEditing: false,
+            editingTitle: this.props.task.title,
+            editingDescription: this.props.task.description
+        })
+    }
+
+    completeEdit = () => {
+        this.setState({
+            isEditing: false
+        })
+    }
+
+    deleteTask = () => {
         TasksService.deleteTask(this.props.task.id)
             .then(res => {
-                console.log(res);
+                this.props.handleDelete(this.props.task.id);
+            })
+            .catch(err => console.log(err));
+    }
+
+    editTask = () => {
+        let editedTask = {
+            id: this.props.task.id,
+            title: this.state.editingTitle,
+            description: this.state.editingDescription,
+            isCompleted: false
+        }
+
+        TasksService.editTask(editedTask)
+            .then(res => {
+                this.completeEdit();
+                this.props.handleEdit(res);
             })
             .catch(err => console.log(err));
     }
@@ -36,10 +64,11 @@ class Task extends React.Component {
     }
 
     handleChange = (event) => {
-        let fieldValue = event.target.value
-        if (this.validateName(fieldValue)) {
-            this.setState({ name: fieldValue })
-        }
+        const value = event.target.value;
+        this.setState({
+            ...this.state,
+            [event.target.name]: value
+        });
     }
 
     render() {
@@ -52,16 +81,19 @@ class Task extends React.Component {
                         <input
                             className="title-field"
                             type="text"
+                            name="editingTitle"
                             value={this.state.editingTitle}
                             onChange={this.handleChange} />
                         <input
                             className="description-field"
                             type="text"
+                            name="editingDescription"
                             value={this.state.editingDescription}
                             onChange={this.handleChange} />
                     </div>
                     <div className="buttons">
-                        <div onClick={this.handleEditClick}><DoneIcon /></div>
+                        <div onClick={this.editTask}><DoneIcon /></div>
+                        <div onClick={this.cancelEdit}><CloseIcon /></div>
                     </div>
                 </div>
             )
@@ -74,8 +106,8 @@ class Task extends React.Component {
 
                     </div>
                     <div className="buttons">
-                        <div onClick={this.handleEditClick}><EditIcon /></div>
-                        <div onClick={this.handleDelete}><DeleteIcon /></div>
+                        <div onClick={this.openEditor}><EditIcon /></div>
+                        <div onClick={this.deleteTask}><DeleteIcon /></div>
                     </div>
                 </div>
             )

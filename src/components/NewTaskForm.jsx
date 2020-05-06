@@ -9,11 +9,17 @@ class NewTaskForm extends React.Component {
 
         this.state = {
             title: "",
-            description: ""
+            description: "",
+            validTitle: null
         }
     }
 
     addTask = () => {
+        this.validateTitle(this.state.title)
+        if (this.state.validTitle !== true) {
+            return
+        }
+
         let task = {
             title: this.state.title,
             description: this.state.description,
@@ -43,6 +49,12 @@ class NewTaskForm extends React.Component {
         });
     }
 
+    validateTitle = (title) => {
+        this.setState({
+            validTitle: title !== ""
+        });
+    }
+
     render() {
         return (
             <div className="new-task-form">
@@ -50,7 +62,7 @@ class NewTaskForm extends React.Component {
                 <div className="form">
                     <span>Title</span>
                     <input
-                        className="description-field"
+                        className={`description-field ${this.state.validTitle === false ? "invalid-field" : ""}`}
                         type="text"
                         name="title"
                         value={this.state.title}
