@@ -1,0 +1,96 @@
+.app {
+  font-family: "Roboto", sans-serif;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+input {
+  border: 0;
+  border-bottom: solid 1px lightgreen;
+  border-radius: 7px;
+  padding: 4px;
+  margin: 0 10px;
+}
+
+.new-task-form {
+  background: #c2e59c;
+  background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);
+  background: linear-gradient(to right, #64b3f4, #c2e59c);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  width: 100%;
+
+  .title {
+    font-size: 20px;
+  }
+
+  .form {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+
+  .add-button {
+    cursor: pointer;
+  }
+}
+
+.list {
+  width: 100%;
+  max-width: 600px;
+}
+
+.task {
+  align-items: center;
+  background: #fff;
+  background-clip: padding-box;
+  border: solid 3px transparent;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  margin-bottom: 10px;
+  padding: 5px 20px;
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -3px;
+    border-radius: inherit;
+    background: #c2e59c;
+    background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);
+    background: linear-gradient(to right, #64b3f4, #c2e59c);
+  }
+
+  .texts {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .title {
+    font-size: 2vw;
+  }
+
+  .editing-task {
+
+  }
+}
