@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   text-align: center;
+  margin: auto;
+  max-width: 800px;
 }
 
 input {
@@ -28,6 +30,7 @@ header {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  width: 90%;
 }
 
 .new-task-form {
@@ -35,27 +38,45 @@ header {
   flex-direction: column;
   margin-bottom: 20px;
   padding: 10px 20px;
-  width: 100%;
 
   .title {
     font-size: 20px;
     margin-bottom: 10px;
   }
 
-  .form {
+  .field-container {
+    align-items: center;
     display: flex;
-  align-items: center;
-  justify-content: center;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .add-button {
     cursor: pointer;
   }
+
+  @media (min-width: 650px) {
+    .form {
+      flex-direction: row;
+    }
+
+    .field-container {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .list {
-  width: 100%;
-  max-width: 600px;
+  width: 90%;
 }
 
 .task {
@@ -105,6 +126,11 @@ header {
   }
 
   .title {
-    font-size: 2vw;
+    font-size: 16px;
+  }
+
+  .description {
+    color: #333;
+    font-size: 12px;
   }
 }

@@ -15,8 +15,17 @@ class Task extends React.Component {
         this.state = {
             isEditing: false,
             editingTitle: props.task.title,
-            editingDescription: props.task.description
+            editingDescription: props.task.description,
+            invalidField: false
         }
+    }
+
+    handleChange = (event) => {
+        const value = event.target.value;
+        this.setState({
+            ...this.state,
+            [event.target.name]: value
+        });
     }
 
     openEditor = () => {
@@ -46,6 +55,12 @@ class Task extends React.Component {
     }
 
     editTask = () => {
+        if (this.state.editingTitle === "") {
+            this.setState({ invalidField: true });
+            return;
+        }
+
+
         let editedTask = {
             id: this.props.task.id,
             title: this.state.editingTitle,
@@ -75,12 +90,8 @@ class Task extends React.Component {
             .catch(err => console.log(err));
     }
 
-    handleChange = (event) => {
-        const value = event.target.value;
-        this.setState({
-            ...this.state,
-            [event.target.name]: value
-        });
+    removeFieldMark = () => {
+        this.setState({ invalidField: false })
     }
 
     renderStatusIcon = () => {
@@ -92,15 +103,18 @@ class Task extends React.Component {
             <div className="task editing-task">
                 <div className="texts">
                     <input
-                        className="title-field"
+                        className={`description-field ${this.state.invalidField ? "invalid-field" : ""}`}
                         type="text"
                         name="editingTitle"
+                        placeholder="Title"
                         value={this.state.editingTitle}
-                        onChange={this.handleChange} />
+                        onChange={this.handleChange}
+                        onFocus={this.removeFieldMark} />
                     <input
                         className="description-field"
                         type="text"
                         name="editingDescription"
+                        placeholder="Description"
                         value={this.state.editingDescription}
                         onChange={this.handleChange} />
                 </div>

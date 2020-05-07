@@ -10,14 +10,22 @@ class NewTaskForm extends React.Component {
         this.state = {
             title: "",
             description: "",
-            validTitle: null
+            invalidField: false
         }
     }
 
+    handleChange = (event) => {
+        const value = event.target.value;
+        this.setState({
+            ...this.state,
+            [event.target.name]: value
+        });
+    }
+
     addTask = () => {
-        this.validateTitle(this.state.title)
-        if (this.state.validTitle !== true) {
-            return
+        if (this.state.title === "") {
+            this.setState({ invalidField: true });
+            return;
         }
 
         let task = {
@@ -41,18 +49,8 @@ class NewTaskForm extends React.Component {
         })
     }
 
-    handleChange = (event) => {
-        const value = event.target.value;
-        this.setState({
-            ...this.state,
-            [event.target.name]: value
-        });
-    }
-
-    validateTitle = (title) => {
-        this.setState({
-            validTitle: title !== ""
-        });
+    removeFieldMark = () => {
+        this.setState({ invalidField: false })
     }
 
     render() {
@@ -60,23 +58,29 @@ class NewTaskForm extends React.Component {
             <div className="new-task-form">
                 <span className="title">Add new task</span>
                 <div className="form">
-                    <span>Title</span>
-                    <input
-                        className={`description-field ${this.state.validTitle === false ? "invalid-field" : ""}`}
-                        type="text"
-                        name="title"
-                        value={this.state.title}
-                        onChange={this.handleChange}
-                    />
-                    <span>Description</span>
-                    <input
-                        className="description-field"
-                        type="text"
-                        name="description"
-                        value={this.state.description}
-                        onChange={this.handleChange}
-                    />
-                    <div className="add-button" onClick={this.addTask}><AddIcon /></div>
+                    <div className="field-container">
+                        <span>Title</span>
+                        <input
+                            className={`description-field ${this.state.invalidField ? "invalid-field" : ""}`}
+                            type="text"
+                            name="title"
+                            value={this.state.title}
+                            onChange={this.handleChange}
+                            onFocus={this.removeFieldMark}
+                        />
+                    </div>
+                    <div className="field-container">
+                        <span>Description</span>
+                        <input
+                            className="description-field"
+                            type="text"
+                            name="description"
+                            value={this.state.description}
+                            onChange={this.handleChange}
+                        />
+
+                    </div>
+                    <div className="add-button" onClick={this.addTask}><AddIcon fontSize="large" /></div>
                 </div>
             </div>
         )
